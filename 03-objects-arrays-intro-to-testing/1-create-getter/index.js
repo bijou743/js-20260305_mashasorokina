@@ -7,9 +7,17 @@ export function createGetter(path) {
   const keys = path.split('.');
   return (obj) => {
     if (!obj) return undefined;
-    return keys.reduce(
-      (acc, key) => (acc && acc.hasOwnProperty(key) && acc[key] !== undefined ? acc[key] : undefined),
-      obj,
-    );
+
+    let current = obj;
+    for (const key of keys) {
+      if (
+        !current ||
+        !Object.prototype.hasOwnProperty.call(current, key)
+      ) {
+        return undefined;
+      }
+      current = current[key];
+    }
+    return current;
   };
 }

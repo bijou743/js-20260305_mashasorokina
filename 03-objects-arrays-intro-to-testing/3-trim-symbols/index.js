@@ -5,7 +5,7 @@
  * @returns {string} - the new string without extra symbols according passed size
  */
 export function trimSymbols(string, size) {
-  if (isNaN(size)) return string;
+  if (typeof size !== 'number' || Number.isNaN(size)) return string;
   if (size === 0) return '';
 
   let result = '';
