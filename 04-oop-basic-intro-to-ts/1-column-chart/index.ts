@@ -46,7 +46,7 @@ export default class ColumnChart {
     const maxValue = Math.max(...this.data);
     const scale = maxValue ? this.chartHeight / maxValue : 0;
     return this.data?.map(item => {
-      return `<div style="--value: ${Math.floor(item * scale)}" data-tooltip="${(item / maxValue * 100).toFixed(0)}%"></div>`
+      return `<div style="--value: ${Math.floor(item * scale)}" data-tooltip="${maxValue ? (item / maxValue * 100).toFixed(0) : 0}%"></div>`
     }).join('');
   }
 
@@ -62,9 +62,16 @@ export default class ColumnChart {
 
   update(data: number[]) {
     this.data = data;
+
     const items = this.element.querySelector('[data-element="body"]');
     if (items) {
       items.innerHTML = this.itemsTemplate;
+    }
+
+    if (!this.data.length) {
+      this.element.classList.add('column-chart_loading');
+    } else {
+      this.element.classList.remove('column-chart_loading');
     }
   }
 
