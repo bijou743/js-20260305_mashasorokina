@@ -98,7 +98,8 @@ export default class SortableTable {
       return;
     }
 
-    Array.from(header.children).forEach(cell => {
+    const cells = header.querySelectorAll<HTMLElement>('[data-id]');
+    cells.forEach(cell => {
       if (cell.dataset.id === field) {
         cell.dataset.order = order;
         const arrow = cell.querySelector('[data-element="arrow"]') as HTMLElement;
