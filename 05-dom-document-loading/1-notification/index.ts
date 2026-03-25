@@ -40,7 +40,7 @@ export default class NotificationMessage {
     `;
   }
 
-  show(target: HTMLElement) {
+  show(target?: HTMLElement) {
     target ? target.append(this.element) : document.body.append(this.element);
 
     if (this.timeoutId) {
