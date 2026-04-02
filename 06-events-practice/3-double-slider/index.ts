@@ -19,6 +19,11 @@ export default class DoubleSlider {
   selected?: DoubleSliderSelected;
   element: HTMLElement;
   private thumb?: HTMLElement;
+  private leftSlider: HTMLElement;
+  private rightSlider: HTMLElement;
+  private leftBoundary: HTMLElement;
+  private rightBoundary: HTMLElement;
+  private progress: HTMLElement;
 
   constructor({min = 0, max = 1000, formatValue, selected }: Options = {}) {
     this.min = min;
@@ -34,6 +39,13 @@ export default class DoubleSlider {
     }
 
     this.element = createElement(this.template);
+
+    this.leftSlider = this.element.querySelector<HTMLElement>('.range-slider__thumb-left')!;
+    this.rightSlider = this.element.querySelector<HTMLElement>('.range-slider__thumb-right')!;
+    this.leftBoundary = this.element.querySelector<HTMLElement>('span[data-element="from"]')!;
+    this.rightBoundary = this.element.querySelector<HTMLElement>('span[data-element="to"]')!;
+    this.progress = this.element.querySelector<HTMLElement>('.range-slider__progress')!;
+
     document.addEventListener('pointerdown', this.pointerdown);
   }
 
@@ -81,20 +93,15 @@ export default class DoubleSlider {
 
   private updateInterface = (type: 'left' | 'right', value: number) => {
     const percent = this.valueToPercent(value);
-    const leftSlider = this.element.querySelector<HTMLElement>('.range-slider__thumb-left');
-    const rightSlider = this.element.querySelector<HTMLElement>('.range-slider__thumb-right');
-    const leftBoundary = this.element.querySelector<HTMLElement>('span[data-element="from"]');
-    const rightBoundary = this.element.querySelector<HTMLElement>('span[data-element="to"]');
-    const progress = this.element.querySelector<HTMLElement>('.range-slider__progress');
 
     if (type === 'left') {
-      leftSlider!.style.setProperty('left', `${percent}%`);
-      leftBoundary!.innerHTML = this.getFormattedValue(value);
-      progress!.style.setProperty('left', `${percent}%`);
+      this.leftSlider.style.setProperty('left', `${percent}%`);
+      this.leftBoundary.innerHTML = this.getFormattedValue(value);
+      this.progress.style.setProperty('left', `${percent}%`);
     } else {
-      rightSlider!.style.setProperty('right', `${100 - percent}%`);
-      rightBoundary!.innerHTML = this.getFormattedValue(value);
-      progress!.style.setProperty('right', `${100 - percent}%`);
+      this.rightSlider.style.setProperty('right', `${100 - percent}%`);
+      this.rightBoundary.innerHTML = this.getFormattedValue(value);
+      this.progress.style.setProperty('right', `${100 - percent}%`);
     }
   }
 

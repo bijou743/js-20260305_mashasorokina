@@ -22,10 +22,17 @@ export default class Tooltip {
     if (!tooltip || !tooltip.dataset?.tooltip) return;
 
     this.render(tooltip.dataset.tooltip);
+    document.addEventListener('pointermove', this.moveTooltip);
   }
 
   private hideTooltip = (event: Event) => {
     this.remove();
+    document.removeEventListener('pointermove', this.moveTooltip);
+  }
+
+  private moveTooltip = (event: PointerEvent) => {
+    this.element!.style.left = `${event.clientX}px`;
+    this.element!.style.top = `${event.clientY}px`;
   }
 
   render(html: string) {

@@ -30,6 +30,7 @@ export default class SortableTable {
   isSortLocally: boolean;
   sorted?: SortableTableSort;
   headersConfig: SortableTableHeader[];
+  private sortedData: SortableTableData[];
 
   constructor(headersConfig: SortableTableHeader[] = [], {
     data = [],
@@ -41,7 +42,7 @@ export default class SortableTable {
     this.isSortLocally = isSortLocally;
     this.sorted = sorted;
 
-    this.sort();
+    this.sortedData = this.sort();
 
     this.element = createElement(this.template);
 
@@ -63,7 +64,7 @@ export default class SortableTable {
       this.sorted.order = this.sorted.order === 'asc' ? 'desc' : 'asc';
     }
 
-    this.sort();
+    this.sortedData = this.sort();
 
     const body = this.element.querySelector('.sortable-table__body') as HTMLElement;
     if (body) {
@@ -133,7 +134,7 @@ export default class SortableTable {
   }
 
   private get bodyTemplate() {
-    if (!this.data?.length || !this.headersConfig?.length) return '';
+    if (!this.sortedData?.length || !this.headersConfig?.length) return '';
     return `
       <div data-element="body" class="sortable-table__body">
         ${this.getRows()}
@@ -142,7 +143,7 @@ export default class SortableTable {
   }
 
   private getRows() {
-    return this.data.map((item) => {
+    return this.sortedData.map((item) => {
       const cols = this.headersConfig.map((header) =>
         this.cellTemplate(item, header)
       );
@@ -158,19 +159,18 @@ export default class SortableTable {
     return `<div class="sortable-table__cell">${item[header.id]}</div>`;
   }
 
-  sort(): void {
-    if (!this.sorted?.id) return;
-
-    if (this.isSortLocally) {
-      this.sortOnClient();
-    }
+  sort(): SortableTableData[] {
+    if (!this.sorted?.id) return [...this.data];
+    return this.sortOnClient();
   }
 
-  private sortOnClient() {
-    if(!this.sorted?.id) return;
+  private sortOnClient(): SortableTableData[] {
+    const data = [...this.data];
+
+    if (!this.sorted?.id) return data;
 
     const sortHeader = this.headersConfig.find(headerConfig => headerConfig.id === this.sorted?.id);
-    if (!sortHeader) return;
+    if (!sortHeader) return data;
 
     const { id, sortType, customSorting } = sortHeader;
     const direction = this.sorted?.order === 'asc' ? 1 : -1;
@@ -186,7 +186,7 @@ export default class SortableTable {
         return (a[id] as number) - (b[id] as number);
       };
     }
-    this.data.sort((a, b) => compare(a, b) * direction);
+   return data.sort((a, b) => compare(a, b) * direction);
   }
 
   remove() {
