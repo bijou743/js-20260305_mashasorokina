@@ -220,7 +220,7 @@ export default class ProductForm {
     return `<select class="form-control" name="${name}">${options.join('')}</select>`;
   }
 
-  async save(event: SubmitEvent): Promise<void> {
+  async save(event?: SubmitEvent): Promise<void> {
     event?.preventDefault();
 
     const form = this.element?.querySelector('[data-element="productForm"]') as HTMLFormElement;
