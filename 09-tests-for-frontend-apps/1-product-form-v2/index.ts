@@ -48,7 +48,7 @@ interface SelectOption {
 
 export default class ProductForm {
   productId?: string;
-  element?: HTMLElement;
+  element!: HTMLElement;
   private categories?: Category[];
   private product?: Product;
   private uploadButton?: HTMLButtonElement;

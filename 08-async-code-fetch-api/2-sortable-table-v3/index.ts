@@ -263,7 +263,7 @@ export default class SortableTable {
     return data;
   }
 
-  private async sortOnServer(sortedId: string | undefined, sortedOrder: SortOrder | undefined): Promise<SortableTableData[]> {
+  async sortOnServer(sortedId: string | undefined, sortedOrder: SortOrder | undefined): Promise<SortableTableData[]> {
     if (this.body) {
       this.body.innerHTML = this.loader;
     }
@@ -277,7 +277,7 @@ export default class SortableTable {
     return data;
   }
 
-  private sortOnClient(sortedId: string | undefined, sortedOrder: SortOrder | undefined): SortableTableData[] {
+  sortOnClient(sortedId: string | undefined, sortedOrder: SortOrder | undefined): SortableTableData[] {
     if (!this.data?.length) return [];
 
     const data = [...this.data];
