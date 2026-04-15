@@ -80,7 +80,7 @@ export default class SortableTable {
     });
   }
 
-  private async render() {
+  async render() {
     await this.sortOnServer(this.sorted?.id, this.sorted?.order);
     this.updateBody();
   }
